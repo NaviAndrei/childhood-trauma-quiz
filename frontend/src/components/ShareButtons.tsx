@@ -68,11 +68,11 @@ export default function ShareButtons({ title, text, url }: ShareButtonsProps) {
         {/* Native Share / Fallback Button */} 
         <button
             onClick={handleNativeShare}
-            title={navigator.share ? "Share via system dialog" : "Copy link to share"}
+            title={typeof navigator.share === 'function' ? "Share via system dialog" : "Copy link to share"}
             className="flex items-center justify-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors shadow"
         >
             <FaShareAlt className="mr-2" />
-            {navigator.share ? 'Share Result' : 'Share Link'} 
+            {typeof navigator.share === 'function' ? 'Share Result' : 'Share Link'}
         </button>
 
         {/* Explicit Copy Link Button */} 
