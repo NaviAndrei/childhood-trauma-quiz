@@ -17,7 +17,7 @@ export default function Home() {
       <div className="text-center max-w-2xl flex flex-col items-center"> {/* Added flex for button centering */}
         {/* Updated Heading */}
         <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-          What's Your Hidden Trauma Type? (Free 5-Min Test)
+          What&apos;s Your Hidden Trauma Type? (Free 5-Min Test)
         </h1>
         {/* Added Subheading */}
         <p className="text-lg md:text-xl text-gray-700 mb-8">
@@ -28,7 +28,7 @@ export default function Home() {
           href="/quiz/childhood-trauma-score"
           className="inline-block px-8 py-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg shadow-md transition-colors mb-6"
         >
-          Start Now – It's Free
+          Start Now – It&apos;s Free
         </Link>
 
         {/* Container for inline text and button */}

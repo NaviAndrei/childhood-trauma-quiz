@@ -254,9 +254,10 @@ export default function QuizPage() {
 
       setQuizData(validatedData);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching quiz:', err);
-      setError(err.message || 'An unexpected error occurred while loading the quiz.');
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred while loading the quiz.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -383,9 +384,10 @@ export default function QuizPage() {
         console.log("Calculation successful, results:", calculatedResults);
         setResults(calculatedResults); // Store the detailed results
         setQuizFinished(true); // Move to the results view
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("Calculation error:", err);
-        setError(err.message || "An unexpected error occurred while calculating results.");
+        const message = err instanceof Error ? err.message : "An unexpected error occurred while calculating results.";
+        setError(message);
         setResults(null); // Ensure no partial results are shown on error
         setQuizFinished(true); // Stay on the final screen to display the error
     } finally {
@@ -429,8 +431,6 @@ export default function QuizPage() {
 
   // Current question data and selected answer value for rendering
   const currentQuestion = quizData.questions[currentQuestionIndex];
-  const selectedValue = currentQuestion ? userAnswers[String(currentQuestion.id)] : undefined;
-  const allQuestionsAnswered = Object.keys(userAnswers).length === quizData.questions.length;
   const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
 
   // Determine if the therapy banner should be shown (only evaluated if results exist)

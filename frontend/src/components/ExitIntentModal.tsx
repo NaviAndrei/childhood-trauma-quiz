@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, ReactNode } from 'react';
+import { useEffect } from 'react';
 import EmailSubscriptionForm from './EmailSubscriptionForm'; // Assuming it's in the same directory
 
 interface ExitIntentModalProps {

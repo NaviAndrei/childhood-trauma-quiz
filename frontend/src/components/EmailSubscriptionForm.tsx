@@ -44,9 +44,11 @@ export default function EmailSubscriptionForm() {
         setMessage({ type: 'success', text: 'Successfully subscribed! Thank you.' });
         setEmail(''); // Clear input on success
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Subscription submission error:', err);
-      setMessage({ type: 'error', text: err.message || 'An unexpected error occurred.' });
+      // Type guard or assertion needed to access err.message safely
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred.';
+      setMessage({ type: 'error', text: message });
     } finally {
       setIsLoading(false);
     }
