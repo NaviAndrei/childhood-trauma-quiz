@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase/client';
 
 export default function Home() {
   // Restore state and functions from context
-  const { bgIndex, setBgIndex, backgroundClasses } = useBackground();
+  const { bgIndex, backgroundClasses } = useBackground();
   // State for email subscription form
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');

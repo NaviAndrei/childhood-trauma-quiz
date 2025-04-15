@@ -320,7 +320,8 @@ export default function QuizPage() {
       };
   // Re-run effect if quiz finishes or modal shown status changes
   // Add handleMouseOut dependency because it's defined with useCallback
-  }, [quizFinished, hasModalBeenShown, handleMouseOut]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quizFinished, hasModalBeenShown]);
 
   const closeModal = () => {
     setIsModalOpen(false);
