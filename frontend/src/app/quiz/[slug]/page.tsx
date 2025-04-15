@@ -282,9 +282,10 @@ export default function QuizPage() {
       setHasModalBeenShown(true); // Mark as shown
 
       // Clean up the specific listener immediately after triggering
-      // We don't need to use the ref here because this runs in the same scope
+      // Use the ref's current value to avoid self-reference issues
       if (listenerAttachedRef.current) {
-        document.documentElement.removeEventListener('mouseout', handleMouseOut);
+        const currentHandler = handleMouseOutRef.current;
+        document.documentElement.removeEventListener('mouseout', currentHandler);
         listenerAttachedRef.current = false;
         console.log('Exit intent listener removed.');
       }
@@ -292,7 +293,7 @@ export default function QuizPage() {
           clearTimeout(timerIdRef.current);
           timerIdRef.current = null;
       }
-  }, [hasModalBeenShown, setIsModalOpen, setHasModalBeenShown]); // Refs not needed here
+  }, [hasModalBeenShown, setIsModalOpen, setHasModalBeenShown]); // Removed handleMouseOut
 
   // Ref to hold the latest version of handleMouseOut for cleanup
   const handleMouseOutRef = useRef(handleMouseOut);

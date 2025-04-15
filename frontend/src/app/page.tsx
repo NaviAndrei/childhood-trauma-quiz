@@ -138,8 +138,7 @@ export default function Home() {
     <main className={`min-h-screen transition-colors duration-500 ${backgroundClasses[bgIndex]}`}>
       {/* Hero Section with specific background */}
       <section
-        className="relative flex min-h-[75vh] flex-col items-center justify-center p-6 md:p-12 bg-cover bg-center text-center"
-        style={{ backgroundImage: "url('/quiz-hero.webp')" }}
+        className="relative flex min-h-[75vh] flex-col items-center justify-center p-6 md:p-12 bg-cover bg-center text-center bg-[url('/quiz-hero.webp')]"
       >
         {/* Overlay for Hero content readability */}
         <div className="absolute inset-0 bg-black/40 z-0"></div> {/* Added overlay */} 
@@ -395,7 +394,7 @@ export default function Home() {
                  </p>
                  <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700">
                    <li>BetterHelp therapists average 12 years trauma experience.</li>
-                   <li>Online-Therapy.com's program is based on the same CBT framework used in NIH studies.</li>
+                   <li>Online-Therapy.com&apos;s program is based on the same CBT framework used in NIH studies.</li>
                    <li>94% of quiz-takers with high trauma scores reported improvement within 8 weeks using either platform.</li>
                  </ul>
                  <div className="bg-gray-100 p-3 rounded-md text-center text-sm text-gray-600 font-medium">
