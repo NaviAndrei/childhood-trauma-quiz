@@ -14,15 +14,15 @@ export function createClient() {
     {
       cookies: {
         get(name: string) {
-          // @ts-ignore Linter incorrectly infers cookieStore as Promise here
+          // @ts-expect-error Linter incorrectly infers cookieStore as Promise here
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: CookieOptions) {
+        set(name: string, _value: string, _options: CookieOptions) {
           // Server Components cannot set cookies. This is client-only for server actions/route handlers.
           // However, the type signature requires the method.
           // cookieStore.set({ name, value, ...options }) // This would throw error
         },
-        remove(name: string, options: CookieOptions) {
+        remove(name: string, _options: CookieOptions) {
           // Server Components cannot remove cookies. This is client-only for server actions/route handlers.
           // However, the type signature requires the method.
           // cookieStore.delete({ name, ...options }) // This would throw error

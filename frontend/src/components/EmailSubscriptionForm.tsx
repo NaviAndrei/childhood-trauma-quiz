@@ -41,9 +41,11 @@ export default function EmailSubscriptionForm() {
         setMessage({ type: 'success', text: 'Thank you for subscribing!' });
         setEmail(''); // Clear input on success
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error subscribing email:', error);
-      setMessage({ type: 'error', text: `Subscription failed: ${error.message || 'Please try again.'}` });
+      // Type check for error message
+      const errorMessage = error instanceof Error ? error.message : 'Please try again.';
+      setMessage({ type: 'error', text: `Subscription failed: ${errorMessage}` });
     } finally {
       setIsLoading(false);
     }
