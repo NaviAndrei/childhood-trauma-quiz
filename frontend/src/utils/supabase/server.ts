@@ -17,11 +17,13 @@ export function createClient() {
           // @ts-expect-error Linter incorrectly infers cookieStore as Promise here
           return cookieStore.get(name)?.value
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         set(_name: string, _value: string, _options: CookieOptions) {
           // Server Components cannot set cookies. This is client-only for server actions/route handlers.
           // However, the type signature requires the method.
           // cookieStore.set({ name, value, ...options }) // This would throw error
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         remove(_name: string, _options: CookieOptions) {
           // Server Components cannot remove cookies. This is client-only for server actions/route handlers.
           // However, the type signature requires the method.
