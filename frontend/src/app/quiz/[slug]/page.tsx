@@ -8,6 +8,7 @@ import ExitIntentModal from '@/components/ExitIntentModal'; // Import the modal
 import { useBackground } from '@/context/BackgroundContext'; // Import the background context hook
 import EmailSubscriptionForm from '@/components/EmailSubscriptionForm';
 import Image from 'next/image'; // Import the Next.js Image component
+import CountdownTimer from '@/components/CountdownTimer'; // Import the new component
 
 // --- Define CTQ Scoring Logic ---
 
@@ -454,6 +455,16 @@ export default function QuizPage() {
                 className="rounded-lg shadow-lg hover:opacity-90 transition-opacity"
                 priority
               />
+              <p className="text-xs text-center mt-2 text-gray-700">Financial aid available—no credit card required to apply.</p>
+              <div className="mt-2 flex items-center justify-center">
+                <span className="text-xs text-red-600 font-medium flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Offer expires in: <CountdownTimer />
+                </span>
+              </div>
+              <p className="text-xs text-center mt-1 text-gray-500">*auto-renews while available</p>
             </a>
           </div>
         )}
@@ -470,6 +481,16 @@ export default function QuizPage() {
                 className="rounded-lg shadow-lg hover:opacity-90 transition-opacity"
                 priority
               />
+              <p className="text-xs text-center mt-2 text-gray-700">Financial aid available—no credit card required to apply.</p>
+              <div className="mt-2 flex items-center justify-center">
+                <span className="text-xs text-red-600 font-medium flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Offer expires in: <CountdownTimer />
+                </span>
+              </div>
+              <p className="text-xs text-center mt-1 text-gray-500">*auto-renews while available</p>
             </a>
           </div>
         )}
@@ -550,7 +571,7 @@ export default function QuizPage() {
                     <a
                       // IMPORTANT: Replace with YOUR REAL Online-Therapy.com affiliate link (go2cloud or a_aid version)
                       // Added source and severity parameters for tracking
-                      href={`https://onlinetherapy.go2cloud.org/SHjz?source=quiz&severity=${Object.values(results.severity).includes('Severe') ? 'severe' : 
+                      href={`https://onlinetherapy.go2cloud.org/SHjz?source=quiz&severity=${Object.values(results.severity).includes('Severe') ? 'severe' :
                         Object.values(results.severity).includes('Moderate') ? 'moderate' : 'low'}`} 
                       target="_blank" // Opens in new tab
                       rel="noopener noreferrer" // Security best practice
@@ -621,8 +642,7 @@ export default function QuizPage() {
               {/* Progress Bar */}  
               <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6 dark:bg-gray-700">
                   <div 
-                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-                      style={{ width: `${progress}%` }}
+                      className={`bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out w-[${progress}%]`}
                   ></div>
               </div>
 
