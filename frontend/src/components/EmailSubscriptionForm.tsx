@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { supabase } from '@/lib/supabase/client';
+import React, { useState, FormEvent } from 'react';
+import { createClient } from '@/utils/supabase/client'; // Import client-side Supabase helper
 
 export default function EmailSubscriptionForm() {
   const [email, setEmail] = useState('');
@@ -9,14 +9,13 @@ export default function EmailSubscriptionForm() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const isValidEmail = (email: string): boolean => {
-    // Basic email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    // Basic email regex validation
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessage(null); // Clear previous messages
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(null);
 
     if (!isValidEmail(email)) {
       setMessage({ type: 'error', text: 'Please enter a valid email address.' });
@@ -24,67 +23,56 @@ export default function EmailSubscriptionForm() {
     }
 
     setIsLoading(true);
+    const supabase = createClient();
 
     try {
       const { error } = await supabase
-        .from('email_subscribers') // Make sure this table name matches your DB
-        .insert([{ email: email }]);
-        // Supabase client handles upsert/error based on constraints
-        // We assume RLS allows anonymous inserts into this table
+        .from('email_subscribers')
+        .insert({ email: email }); // Insert only the email
 
       if (error) {
-        console.error('Supabase subscription error:', error);
-        // Check for unique constraint violation (PostgreSQL error code 23505)
-        if (error.code === '23505') {
+        // Handle potential errors, e.g., duplicate email (violates unique constraint)
+        if (error.code === '23505') { // Postgres unique violation code
           setMessage({ type: 'error', text: 'This email is already subscribed.' });
         } else {
-          throw new Error(error.message || 'Failed to subscribe.');
+          throw error; // Rethrow other errors
         }
       } else {
-        setMessage({ type: 'success', text: 'Successfully subscribed! Thank you.' });
+        setMessage({ type: 'success', text: 'Thank you for subscribing!' });
         setEmail(''); // Clear input on success
       }
-    } catch (err: unknown) {
-      console.error('Subscription submission error:', err);
-      // Type guard or assertion needed to access err.message safely
-      const message = err instanceof Error ? err.message : 'An unexpected error occurred.';
-      setMessage({ type: 'error', text: message });
+    } catch (error: any) {
+      console.error('Error subscribing email:', error);
+      setMessage({ type: 'error', text: `Subscription failed: ${error.message || 'Please try again.'}` });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="mt-8 mb-6 p-6 bg-gray-50 rounded-lg shadow-inner">
-      <h3 className="text-lg font-semibold mb-2 text-center text-gray-700">Want your full trauma breakdown?</h3>
-      <p className="text-sm text-gray-600 mb-4 text-center">Join 5,000+ subscribers getting exclusive tips.</p>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-2">
-        <label htmlFor="email-subscribe" className="sr-only">Email address</label>
+    <div className="mt-6 border-t pt-4">
+      <p className="text-center text-gray-600 mb-3 font-medium">Subscribe for Updates & Insights</p>
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row justify-center items-center gap-2">
         <input
-          id="email-subscribe"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="your.email@example.com"
+          placeholder="Enter your email"
           required
           disabled={isLoading}
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:max-w-xs w-full flex-grow"
+          aria-label="Email for subscription"
+          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:max-w-xs w-full disabled:opacity-70"
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full sm:w-auto px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-md shadow-sm transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+          className="w-full sm:w-auto px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
         >
-          {isLoading ? (
-             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-             </svg>
-          ) : 'Get Free Tips'}
+          {isLoading ? 'Subscribing...' : 'Subscribe'}
         </button>
       </form>
       {message && (
-        <p className={`mt-3 text-sm text-center font-medium ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+        <p className={`mt-2 text-center text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
           {message.text}
         </p>
       )}

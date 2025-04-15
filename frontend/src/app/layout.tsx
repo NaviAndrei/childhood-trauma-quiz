@@ -7,8 +7,14 @@ import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Childhood Trauma Quiz",
-  description: "Understand your experiences with the Childhood Trauma Questionnaire (CTQ-SF)",
+  metadataBase: new URL('https://ihatethisquiz.com'), // Replace with your actual domain
+  title: {
+    template: '%s | Trauma Quiz', // Allows page titles to be appended
+    default: 'Childhood Trauma Quiz', // Default title if page doesn't specify
+  },
+  description: "Understand potential impacts of early experiences with our validated Childhood Trauma Questionnaire (CTQ-SF). Get anonymous results and insights.",
+  // Add keywords if desired (less impactful now, but doesn't hurt)
+  // keywords: ['childhood trauma', 'trauma quiz', 'CTQ-SF', 'mental health', 'adverse childhood experiences', 'ACEs'],
 };
 
 export default function RootLayout({
