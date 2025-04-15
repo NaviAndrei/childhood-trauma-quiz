@@ -270,6 +270,7 @@ export default function QuizPage() {
   }, [fetchQuizData]);
 
   // --- Exit Intent Logic ---
+  // Define with useCallback, include state setters in dependencies
   const handleMouseOut = useCallback((e: MouseEvent) => {
       // Check if already shown or mouse not near top enough, or if mouse moved onto another element within the window
       if (hasModalBeenShown || e.clientY >= 15 || e.relatedTarget) {
@@ -281,6 +282,7 @@ export default function QuizPage() {
       setHasModalBeenShown(true); // Mark as shown
 
       // Clean up the specific listener immediately after triggering
+      // We don't need to use the ref here because this runs in the same scope
       if (listenerAttachedRef.current) {
         document.documentElement.removeEventListener('mouseout', handleMouseOut);
         listenerAttachedRef.current = false;
@@ -290,8 +292,17 @@ export default function QuizPage() {
           clearTimeout(timerIdRef.current);
           timerIdRef.current = null;
       }
-  }, [hasModalBeenShown, listenerAttachedRef, timerIdRef, setIsModalOpen, setHasModalBeenShown]);
+  }, [hasModalBeenShown, setIsModalOpen, setHasModalBeenShown]); // Refs not needed here
 
+  // Ref to hold the latest version of handleMouseOut for cleanup
+  const handleMouseOutRef = useRef(handleMouseOut);
+
+  // Update the ref whenever handleMouseOut changes
+  useEffect(() => {
+    handleMouseOutRef.current = handleMouseOut;
+  }, [handleMouseOut]);
+
+  // Effect to add/remove the listener
   useEffect(() => {
       // Only add listener if quiz is finished AND modal hasn't been shown yet
       if (quizFinished && !hasModalBeenShown && !listenerAttachedRef.current) {
@@ -299,6 +310,7 @@ export default function QuizPage() {
           console.log('Setting timer for exit intent listener...');
           timerIdRef.current = setTimeout(() => {
               console.log('Attaching exit intent listener.');
+              // Attach the current handleMouseOut function
               document.documentElement.addEventListener('mouseout', handleMouseOut);
               listenerAttachedRef.current = true;
               timerIdRef.current = null; // Clear timer ID after attaching
@@ -307,9 +319,11 @@ export default function QuizPage() {
 
       // Cleanup function for the effect
       return () => {
+          // Use the ref to get the *latest* handleMouseOut for removal
+          const currentHandler = handleMouseOutRef.current;
           if (listenerAttachedRef.current) {
               console.log('Cleaning up exit intent listener due to effect cleanup.');
-              document.documentElement.removeEventListener('mouseout', handleMouseOut);
+              document.documentElement.removeEventListener('mouseout', currentHandler);
               listenerAttachedRef.current = false;
           }
           if (timerIdRef.current) {
@@ -318,10 +332,8 @@ export default function QuizPage() {
               timerIdRef.current = null;
           }
       };
-  // Re-run effect if quiz finishes or modal shown status changes
-  // Add handleMouseOut dependency because it's defined with useCallback
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quizFinished, hasModalBeenShown]);
+  // Dependencies: re-run if quiz finishes, modal status changes, or the handler itself changes
+  }, [quizFinished, hasModalBeenShown, handleMouseOut]);
 
   const closeModal = () => {
     setIsModalOpen(false);
