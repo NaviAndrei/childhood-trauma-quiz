@@ -40,10 +40,6 @@ export default function Home() {
     }
   ]);
 
-  const changeBackground = () => {
-    setBgIndex((prevIndex) => (prevIndex + 1) % backgroundClasses.length);
-  };
-
   // Testimonial navigation
   const goToPreviousTestimonial = () => {
     setCurrentTestimonialIndex((prevIndex) =>
@@ -270,7 +266,7 @@ export default function Home() {
             {/* Testimonial Content */}
             <div className="transition-opacity duration-500 ease-in-out mb-6">
                  <blockquote className="text-lg italic text-gray-700  mb-4">
-                    "{testimonialsData[currentTestimonialIndex].quote}"
+                    &quot;{testimonialsData[currentTestimonialIndex].quote}&quot;
                  </blockquote>
                  <p className="text-md font-medium text-gray-600">
                     - {testimonialsData[currentTestimonialIndex].attribution}
@@ -421,7 +417,7 @@ export default function Home() {
               </summary>
               <div className="px-6 pb-6">
                 <p className="text-gray-700 mb-4">
-                  Absolutely. Many start with Online-Therapy.com's structured approach, then transition to BetterHelp for ongoing support. Both offer:
+                  Absolutely. Many start with Online-Therapy.com&apos;s structured approach, then transition to BetterHelp for ongoing support. Both offer:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-700">
                   <li>Free switching between therapists</li>
@@ -475,7 +471,7 @@ export default function Home() {
             {/* FAQ 5 - Accordion */}
             <details className="border border-gray-200 rounded-lg group">
               <summary className="flex justify-between items-center text-xl font-semibold p-6 cursor-pointer list-none hover:bg-gray-50 transition-colors">
-                 <span>What if I can't afford therapy?</span>
+                 <span>What if I can&apos;t afford therapy?</span>
                  {/* Chevron Icon */}
                  <span className="transition-transform duration-300 group-open:rotate-90">
                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -528,7 +524,7 @@ export default function Home() {
           </h2>
           {/* Updated Value Proposition */}
           <p className="text-md text-gray-700 mb-2">
-             Get exclusive healing tools you won't find on the site.
+             Get exclusive healing tools you won&apos;t find on the site.
            </p>
            <p className="text-sm text-gray-600 mb-4">
              ▸ Join 5,000+ subscribers receiving:

@@ -290,7 +290,7 @@ export default function QuizPage() {
           clearTimeout(timerIdRef.current);
           timerIdRef.current = null;
       }
-  }, [hasModalBeenShown, listenerAttachedRef, timerIdRef]);
+  }, [hasModalBeenShown, listenerAttachedRef, timerIdRef, setIsModalOpen, setHasModalBeenShown]);
 
   useEffect(() => {
       // Only add listener if quiz is finished AND modal hasn't been shown yet
