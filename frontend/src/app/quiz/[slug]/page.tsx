@@ -31,7 +31,7 @@ export type QuizData = {
 };
 
 type QuizPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>; // <-- Wrap params in Promise
 };
 
 async function fetchQuizData(slug: string): Promise<QuizData | null> {
@@ -93,7 +93,8 @@ async function fetchQuizData(slug: string): Promise<QuizData | null> {
 
 // This Server Component fetches data and passes it to the Client Component
 export default async function QuizPage({ params }: QuizPageProps) {
-  const quizData = await fetchQuizData(params.slug);
+  const awaitedParams = await params; // <-- Await params
+  const quizData = await fetchQuizData(awaitedParams.slug); // <-- Use awaited params
 
   if (!quizData) {
     notFound(); // Trigger 404 if quiz or essential data not found
